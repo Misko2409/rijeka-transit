@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     app_name: str = "Rijeka Transit API"
     app_version: str = "0.1.0"
 
+    autotrolej_base_url: str = "https://api.autotrolej.hr/api/open/v1"
     autotrolej_username: str = ""
     autotrolej_password: str = ""
 
