@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from backend.app.api.v1.routes import router as routes_router
 from backend.app.api.v1.stops import router as stops_router
 from backend.app.api.v1.vehicles import router as vehicles_router
 from backend.app.core.config import get_settings
@@ -19,6 +20,11 @@ app.include_router(
 
 app.include_router(
     stops_router,
+    prefix="/api/v1",
+)
+
+app.include_router(
+    routes_router,
     prefix="/api/v1",
 )
 

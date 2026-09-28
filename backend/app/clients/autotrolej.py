@@ -1,6 +1,9 @@
 import httpx
 
 from backend.app.core.config import Settings
+from backend.app.models.external.autotrolej.route import (
+    AutotrolejRoutesResponse,
+)
 from backend.app.models.external.autotrolej.stop import (
     AutotrolejStopsResponse,
 )
@@ -66,3 +69,15 @@ class AutotrolejClient:
         response.raise_for_status()
 
         return AutotrolejStopsResponse.model_validate(response.json())
+
+    async def get_routes(self) -> AutotrolejRoutesResponse:
+        if not self.token:
+            await self.login()
+
+        response = await self._http_client.get(
+            "/voznired/linije",
+            headers={"token": self.token},
+        )
+        response.raise_for_status()
+
+        return AutotrolejRoutesResponse.model_validate(response.json())
