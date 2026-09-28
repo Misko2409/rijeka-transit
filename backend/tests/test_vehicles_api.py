@@ -4,26 +4,22 @@ from fastapi.testclient import TestClient
 
 from backend.app.api.dependencies import get_vehicle_service
 from backend.app.main import app
-from backend.app.models.vehicle import VehiclesResponse
+from backend.app.models.api.vehicle import Vehicle, VehiclesResponse
 
 client = TestClient(app)
 
 
 def test_get_vehicles_returns_vehicles():
-    expected_response = VehiclesResponse.model_validate(
-        {
-            "msg": "ok",
-            "res": [
-                {
-                    "gbr": 773,
-                    "lon": 14.446925,
-                    "lat": 45.323968,
-                    "voznjaId": None,
-                    "voznjaBusId": 2214313,
-                }
-            ],
-            "err": False,
-        }
+    expected_response = VehiclesResponse(
+        vehicles=[
+            Vehicle(
+                vehicle_number=773,
+                longitude=14.446925,
+                latitude=45.323968,
+                trip_id=None,
+                vehicle_trip_id=2214313,
+            )
+        ]
     )
 
     service = AsyncMock()
@@ -43,9 +39,18 @@ def test_get_vehicles_returns_vehicles():
 
     data = response.json()
 
-    assert data["msg"] == "ok"
-    assert data["err"] is False
-    assert len(data["res"]) == 1
-    assert data["res"][0]["gbr"] == 773
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data["vehicles"]) == 1
+
+    vehicle = data["vehicles"][0]
+
+    assert vehicle["vehicle_number"] == 773
+    assert vehicle["longitude"] == 14.446925
+    assert vehicle["latitude"] == 45.323968
+    assert vehicle["trip_id"] is None
+    assert vehicle["vehicle_trip_id"] == 2214313
 
     service.get_vehicles.assert_awaited_once()

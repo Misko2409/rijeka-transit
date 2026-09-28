@@ -1,7 +1,12 @@
 import httpx
 
 from backend.app.core.config import Settings
-from backend.app.models.vehicle import VehiclesResponse
+from backend.app.models.external.autotrolej.stop import (
+    AutotrolejStopsResponse,
+)
+from backend.app.models.external.autotrolej.vehicle import (
+    AutotrolejVehiclesResponse,
+)
 
 
 class AutotrolejClient:
@@ -38,7 +43,7 @@ class AutotrolejClient:
 
         return token
 
-    async def get_buses(self) -> VehiclesResponse:
+    async def get_buses(self) -> AutotrolejVehiclesResponse:
         if not self.token:
             await self.login()
 
@@ -48,4 +53,16 @@ class AutotrolejClient:
         )
         response.raise_for_status()
 
-        return VehiclesResponse.model_validate(response.json())
+        return AutotrolejVehiclesResponse.model_validate(response.json())
+
+    async def get_stops(self) -> AutotrolejStopsResponse:
+        if not self.token:
+            await self.login()
+
+        response = await self._http_client.get(
+            "/voznired/stanice",
+            headers={"token": self.token},
+        )
+        response.raise_for_status()
+
+        return AutotrolejStopsResponse.model_validate(response.json())

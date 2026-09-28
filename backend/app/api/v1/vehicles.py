@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from backend.app.api.dependencies import get_vehicle_service
-from backend.app.models.vehicle import VehiclesResponse
+from backend.app.models.api.vehicle import VehiclesResponse
 from backend.app.services.vehicle_service import VehicleService
 
 router = APIRouter(prefix="/vehicles", tags=["vehicles"])

@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class Vehicle(BaseModel):
+class AutotrolejVehicle(BaseModel):
     gbr: int
     lon: float
     lat: float
@@ -9,7 +9,7 @@ class Vehicle(BaseModel):
     voznja_bus_id: int = Field(alias="voznjaBusId")
 
 
-class VehiclesResponse(BaseModel):
+class AutotrolejVehiclesResponse(BaseModel):
     msg: str
-    res: list[Vehicle]
+    res: list[AutotrolejVehicle]
     err: bool
