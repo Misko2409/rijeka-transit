@@ -1,6 +1,10 @@
 import httpx
 
 from backend.app.core.config import Settings
+from backend.app.models.external.autotrolej.departure import (
+    AutotrolejRouteDeparturesResponse,
+    AutotrolejStopDeparturesResponse,
+)
 from backend.app.models.external.autotrolej.route import (
     AutotrolejRoutesResponse,
 )
@@ -81,3 +85,35 @@ class AutotrolejClient:
         response.raise_for_status()
 
         return AutotrolejRoutesResponse.model_validate(response.json())
+
+    async def get_stop_departures(
+        self,
+        stop_id: int,
+    ) -> AutotrolejStopDeparturesResponse:
+        if not self.token:
+            await self.login()
+
+        response = await self._http_client.get(
+            "/voznired/polasciStanica",
+            params={"stanicaId": stop_id},
+            headers={"token": self.token},
+        )
+        response.raise_for_status()
+
+        return AutotrolejStopDeparturesResponse.model_validate(response.json())
+
+    async def get_route_departures(
+        self,
+        route_unique_id: str,
+    ) -> AutotrolejRouteDeparturesResponse:
+        if not self.token:
+            await self.login()
+
+        response = await self._http_client.get(
+            "/voznired/polasciLinija",
+            params={"uniqueLinijaId": route_unique_id},
+            headers={"token": self.token},
+        )
+        response.raise_for_status()
+
+        return AutotrolejRouteDeparturesResponse.model_validate(response.json())

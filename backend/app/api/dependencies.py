@@ -6,6 +6,7 @@ from fastapi import Depends
 
 from backend.app.clients.autotrolej import AutotrolejClient
 from backend.app.core.config import get_settings
+from backend.app.services.departure_service import DepartureService
 from backend.app.services.route_service import RouteService
 from backend.app.services.stop_service import StopService
 from backend.app.services.vehicle_service import VehicleService
@@ -46,3 +47,9 @@ async def get_route_service(
     client: AutotrolejClientDependency,
 ) -> RouteService:
     return RouteService(client)
+
+
+async def get_departure_service(
+    client: AutotrolejClientDependency,
+) -> DepartureService:
+    return DepartureService(client)
