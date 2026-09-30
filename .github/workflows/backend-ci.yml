@@ -33,4 +33,6 @@ jobs:
         run: python -m ruff format --check backend
 
       - name: Run backend tests
+        env:
+          DATABASE_URL: postgresql+psycopg://test:test@localhost:5432/test
         run: python -m pytest backend/tests -v
