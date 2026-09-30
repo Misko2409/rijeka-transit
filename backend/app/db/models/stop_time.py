@@ -18,12 +18,14 @@ class StopTime(Base):
         Integer,
         ForeignKey("trips.id"),
         nullable=False,
+        index=True,
     )
 
     stop_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("stops.id"),
         nullable=False,
+        index=True,
     )
 
     arrival_time: Mapped[datetime | None] = mapped_column(

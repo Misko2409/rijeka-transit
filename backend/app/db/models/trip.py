@@ -16,6 +16,7 @@ class Trip(Base):
         String(50),
         ForeignKey("routes.unique_id"),
         nullable=False,
+        index=True,
     )
 
     vehicle_trip_id: Mapped[int] = mapped_column(
